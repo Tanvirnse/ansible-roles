@@ -63,12 +63,6 @@
     mode: '0600'
   notify: Restart nginx
 
-# 👇 ADD THIS AT THE END OF YOUR YAML FILE
-- name: Restart nginx
-  service:
-    name: nginx
-    state: restarted
-
 - name: Ensure nginx cache directory exists
   file:
     path: /mnt/ome-storage/nginx-cache
@@ -76,3 +70,10 @@
     owner: www-data
     group: www-data
     mode: '0755'
+
+# 👇 ADD THIS AT THE END OF YOUR YAML FILE
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted
+
