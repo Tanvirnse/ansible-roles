@@ -68,3 +68,11 @@
   service:
     name: nginx
     state: restarted
+
+- name: Ensure nginx cache directory exists
+  file:
+    path: /mnt/ome-storage/nginx-cache
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
