@@ -1,0 +1,5 @@
+---
+roles:
+  - name: os-edge-nginx
+    src: https://github.com/Tanvirnse/ansible-roles.git
+    version: main
