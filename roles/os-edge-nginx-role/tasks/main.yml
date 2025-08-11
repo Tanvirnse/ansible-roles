@@ -62,3 +62,9 @@
     group: root
     mode: '0600'
   notify: Restart nginx
+
+# 👇 ADD THIS AT THE END OF YOUR YAML FILE
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted
