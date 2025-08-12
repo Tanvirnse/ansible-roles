@@ -1,0 +1,2 @@
+#!/bin/sh
+ss -tn src :443 | awk 'NR>1' | wc -l

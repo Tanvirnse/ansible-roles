@@ -1,0 +1,10 @@
+---
+galaxy_info:
+  author: your_name
+  description: Install a port-monitoring script and configure Telegraf to use it.
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
