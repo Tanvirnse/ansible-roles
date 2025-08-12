@@ -1,5 +1,5 @@
 ---
-- name: Configure and Install NGINX
+- name: Configure servers
   hosts: all
   become: yes
   roles:

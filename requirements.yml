@@ -1,5 +1,5 @@
 ---
 roles:
-  - name: os-edge-nginx-role
+  - name: ostream-telegraf-openport
     src: https://github.com/Tanvirnse/ansible-roles.git
     version: main
