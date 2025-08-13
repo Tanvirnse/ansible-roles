@@ -37,8 +37,8 @@
 #  notify: Reload UFW
 
 - name: Enable UFW
- command: ufw --force enable
- notify: Reload UFW
+  command: ufw --force enable
+  notify: Reload UFW
 
 - name: Ensure UFW service is started and enabled at boot
   systemd:
