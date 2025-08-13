@@ -3,5 +3,4 @@
   hosts: all
   become: yes
   roles:
-    - ostream-telegraf-openport
-    - os-edge-nginx-role
+    - ufw

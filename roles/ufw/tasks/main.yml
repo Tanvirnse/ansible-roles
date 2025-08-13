@@ -1,0 +1,47 @@
+---
+# tasks file for os-edge-firewall
+
+#- name: Ensure UFW is installed
+# apt:
+#   name: ufw
+#   state: present
+#    update_cache: yes
+#  when: ansible_os_family == "Debian"
+
+- name: Allow BOL All
+  command: sudo ufw allow from 182.163.115.224/29 comment 'BOL All'
+  notify: Reload UFW
+
+- name: Allow BTS All
+  command: sudo ufw allow from 103.234.24.176/29 comment 'BTS All'
+  notify: Reload UFW
+
+- name: Allow Link3 All
+  command: sudo ufw allow from 123.200.10.160/28 comment 'Link3 All'
+  notify: Reload UFW
+
+#- name: Allow os-edge-rc-01
+#  command: ufw allow from 103.191.178.187/32 comment 'os-edge-rc-01'
+#  notify: Reload UFW
+
+#- name: Allow os-origin-rc-02
+# command: ufw allow from 103.191.178.21/32 comment 'os-origin-rc-02'
+#  notify: Reload UFW
+
+#- name: Allow os-edge-mc-06
+#  command: ufw allow from 103.191.178.21/32 comment 'os-edge-mc-06'
+#  notify: Reload UFW
+
+#- name: Allow os-edge-mv-04
+#  command: ufw allow from 103.191.178.21/32 comment 'os-edge-mv-04'
+#  notify: Reload UFW
+
+- name: Enable UFW
+ command: ufw --force enable
+ notify: Reload UFW
+
+- name: Ensure UFW service is started and enabled at boot
+  systemd:
+    name: ufw
+    state: started
+    enabled: yes

@@ -1,0 +1,5 @@
+# handlers file for os-edge-firewall
+
+- name: Reload UFW
+  command: ufw reload
+
