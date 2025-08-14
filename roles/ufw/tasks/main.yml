@@ -24,7 +24,7 @@
 #  command: ufw allow from 103.191.178.187/32 comment 'os-edge-rc-01'
 # notify: Reload UFW
 
-- name: Delete os-edge-rc-02 rule
+- name: Delete os-origin-rc-02
   command: sudo ufw delete allow from 103.191.178.172/32 comment 'os-origin-rc-02'
   notify: Reload UFW
 
