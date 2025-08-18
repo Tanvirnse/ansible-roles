@@ -12,7 +12,23 @@
 #   update_cache: yes
 # become: yes
 
-- name: Copy custom default site config
+- name: Ensure /etc/nginx/sites-available directory exists
+  file:
+    path: /etc/nginx/sites-available
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Ensure /etc/nginx/sites-enabled directory exists
+  file:
+    path: /etc/nginx/sites-enabled
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Copy custom healthcheck site config
   template:
     src: healthcheck.j2
     dest: /etc/nginx/sites-available/healthcheck
@@ -20,5 +36,14 @@
     group: root
     mode: '0644'
   notify: Restart nginx
+
+- name: Enable healthcheck site by creating symlink
+  file:
+    src: /etc/nginx/sites-available/healthcheck
+    dest: /etc/nginx/sites-enabled/healthcheck
+    state: link
+    force: yes  # Overwrite if already exists
+
+
 
 
