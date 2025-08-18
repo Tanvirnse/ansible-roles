@@ -1,0 +1,48 @@
+---
+
+- name: Remove any existing root nofile limit
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    regexp: '^root\s+-\s+nofile'
+    state: absent
+    backup: yes
+
+- name: Remove any existing soft nofile limit for all users
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    regexp: '^\*\s+soft\s+nofile'
+    state: absent
+    backup: yes
+
+- name: Remove any existing hard nofile limit for all users
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    regexp: '^\*\s+hard\s+nofile'
+    state: absent
+    backup: yes
+
+- name: Set root nofile limit
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    line: 'root    -   nofile 65536'
+    state: present
+    insertafter: EOF
+    backup: yes
+
+- name: Set soft nofile limit for all users
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    line: '* soft nofile 65536'
+    state: present
+    insertafter: EOF
+    backup: yes
+
+- name: Set hard nofile limit for all users
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    line: '* hard nofile 65536'
+    state: present
+    insertafter: EOF
+    backup: yes
+
+
