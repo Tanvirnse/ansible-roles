@@ -24,16 +24,16 @@
 #  command: ufw allow from 103.191.178.187/32 comment 'os-edge-rc-01'
 # notify: Reload UFW
 
-- name: Delete os-origin-rc-02
-  command: sudo ufw delete allow from 103.191.178.172/32 comment 'os-origin-rc-02'
+#- name: Delete os-origin-rc-02
+#  command: sudo ufw delete allow from 103.191.178.172/32 comment 'os-origin-rc-02'
+#  notify: Reload UFW
+
+- name: Allow os-edge-mv-05
+  command: sudo ufw allow from 103.174.50.177/32 comment 'os-edge-mv-05'
   notify: Reload UFW
 
-- name: Allow os-edge-rc-02
-  command: sudo ufw allow from 103.191.178.172/32 comment 'os-edge-rc-02'
-  notify: Reload UFW
-
-- name: Allow os-origin-rc-02
-  command: sudo ufw allow from 103.191.178.21/32 comment 'os-origin-rc-02'
+- name: Allow os-edge-mc-07
+  command: sudo ufw allow from 103.244.247.184/32 comment 'os-edge-mc-07'
   notify: Reload UFW
 
 #- name: Allow os-edge-mc-06
