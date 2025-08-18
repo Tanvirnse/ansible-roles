@@ -28,6 +28,16 @@
     group: root
     mode: '0755'
 
+- name: Remove default site from sites-available if exists
+  file:
+    path: /etc/nginx/sites-available/default
+    state: absent
+
+- name: Remove default site from sites-enabled if exists
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
 - name: Copy custom healthcheck site config
   template:
     src: healthcheck.j2
