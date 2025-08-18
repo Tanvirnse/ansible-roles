@@ -1,0 +1,24 @@
+---
+- name: Update all system packages
+  apt:
+    upgrade: dist
+    update_cache: yes
+  become: yes
+
+- name: Install NGINX
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Copy custom default site config
+  template:
+    src: healthcheck.j2
+    dest: /etc/nginx/sites-available/healthcheck
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart nginx
+
+
