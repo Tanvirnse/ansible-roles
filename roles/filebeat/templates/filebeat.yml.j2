@@ -1,0 +1,54 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /mnt/ome-storage/logs/error.log
+#    - /var/log/kern.log
+    # Add more log paths as needed
+    # - /opt/applications/app1/logs/*.log
+    # - /home/user/myapp/logs/*.log
+  fields:
+#    source_server: os-edge-bc-01
+    source_server: up-pop-servers
+    environment: production
+    datacenter: ostream
+  fields_under_root: true
+
+name: up-pop
+tags: ["production", "up-pop"]
+
+# Disable ALL setup features for clean operation
+setup.ilm.enabled: false
+setup.template.enabled: false
+setup.dashboards.enabled: false
+setup.kibana.enabled: false
+
+output.elasticsearch:
+  hosts: ["https://rnd-logs.udvash-unmesh.com:9200"]
+  username: "elastic"
+  password: "kxWKFTH+rzzRPp9ld8QH"
+  ssl:
+    enabled: true
+    verification_mode: none
+
+  # Fixed index name - will create index named "ostream-pop"
+  index: "ostream-up-pop"
+
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - timestamp:
+      field: "@timestamp"
+      layouts:
+        - '2006-01-02T15:04:05Z'
+        - '2006-01-02T15:04:05.999Z'
+      test:
+        - '2019-06-22T16:33:51Z'
+
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  keepfiles: 7
+  permissions: 0644

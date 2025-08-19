@@ -1,0 +1,17 @@
+---
+- name: Ensure Filebeat is installed
+  apt:
+    name: filebeat
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Copy Filebeat configuration
+  template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart Filebeat
+  become: yes
