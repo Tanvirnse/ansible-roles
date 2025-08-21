@@ -36,17 +36,17 @@
 #  command: sudo ufw allow from 103.244.247.184/32 comment 'os-edge-mc-07'
 #  notify: Reload UFW
 
-- name: Allow 8089
-  command: sudo ufw allow 8089 comment 'healtcheck-allow-8089'
+#- name: Allow 8089
+# command: sudo ufw allow 8089 comment 'healtcheck-allow-8089'
+# notify: Reload UFW
+
+- name: delete 80
+  command: sudo ufw delete allow 80
   notify: Reload UFW
 
-#- name: delete 80
-# command: sudo ufw delete allow 80
-#  notify: Reload UFW
-
-#- name: delete 443
-#  command: sudo ufw delete allow 443
-#  notify: Reload UFW
+- name: delete 443
+  command: sudo ufw delete allow 443
+  notify: Reload UFW
 
 #- name: Allow os-edge-mv-04
 #  command: ufw allow from 103.174.50.54/32 comment 'os-edge-mv-04'
