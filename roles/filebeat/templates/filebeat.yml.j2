@@ -2,20 +2,20 @@ filebeat.inputs:
 - type: log
   enabled: true
   paths:
-    - /var/log/nginx/error.log
+    - /var/log/ovenmediaengine/ovenmediaengine.log
 #    - /var/log/kern.log
     # Add more log paths as needed
     # - /opt/applications/app1/logs/*.log
     # - /home/user/myapp/logs/*.log
   fields:
 #    source_server: os-edge-bc-01
-    source_server: up-pop-servers
+    source_server: origin-servers
     environment: production
     datacenter: ostream
   fields_under_root: true
 
 name: up-pop
-tags: ["production", "up-pop"]
+tags: ["production", "origin"]
 
 # Disable ALL setup features for clean operation
 setup.ilm.enabled: false
@@ -32,7 +32,7 @@ output.elasticsearch:
     verification_mode: none
 
   # Fixed index name - will create index named "ostream-pop"
-  index: "ostream-up-pop"
+  index: "ostream-origin"
 
 processors:
   - add_host_metadata:
