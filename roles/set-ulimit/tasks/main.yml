@@ -1,85 +1,81 @@
 ---
-- name: Set nofile limit to 100000 for all users
-  hosts: all
-  become: true
-  tasks:
+- name: Remove existing root nofile limit
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    regexp: '^root\s+-\s+nofile'
+    state: absent
+    backup: yes
 
-    - name: Remove existing root nofile limit
-      ansible.builtin.lineinfile:
-        path: /etc/security/limits.conf
-        regexp: '^root\s+-\s+nofile'
-        state: absent
-        backup: yes
+- name: Remove existing soft nofile limit for all users
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    regexp: '^\*\s+soft\s+nofile'
+    state: absent
+    backup: yes
 
-    - name: Remove existing soft nofile limit for all users
-      ansible.builtin.lineinfile:
-        path: /etc/security/limits.conf
-        regexp: '^\*\s+soft\s+nofile'
-        state: absent
-        backup: yes
+- name: Remove existing hard nofile limit for all users
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    regexp: '^\*\s+hard\s+nofile'
+    state: absent
+    backup: yes
 
-    - name: Remove existing hard nofile limit for all users
-      ansible.builtin.lineinfile:
-        path: /etc/security/limits.conf
-        regexp: '^\*\s+hard\s+nofile'
-        state: absent
-        backup: yes
+- name: Set root nofile limit
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    line: 'root    -   nofile 100000'
+    state: present
+    insertafter: EOF
+    backup: yes
 
-    - name: Set root nofile limit
-      ansible.builtin.lineinfile:
-        path: /etc/security/limits.conf
-        line: 'root    -   nofile 100000'
-        state: present
-        insertafter: EOF
-        backup: yes
+- name: Set soft nofile limit for all users
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    line: '* soft nofile 100000'
+    state: present
+    insertafter: EOF
+    backup: yes
 
-    - name: Set soft nofile limit for all users
-      ansible.builtin.lineinfile:
-        path: /etc/security/limits.conf
-        line: '* soft nofile 100000'
-        state: present
-        insertafter: EOF
-        backup: yes
+- name: Set hard nofile limit for all users
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    line: '* hard nofile 100000'
+    state: present
+    insertafter: EOF
+    backup: yes
 
-    - name: Set hard nofile limit for all users
-      ansible.builtin.lineinfile:
-        path: /etc/security/limits.conf
-        line: '* hard nofile 100000'
-        state: present
-        insertafter: EOF
-        backup: yes
+- name: Ensure pam_limits.so is enabled in common-session
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/common-session
+    line: 'session required pam_limits.so'
+    state: present
+    create: yes
+    backup: yes
 
-    - name: Ensure pam_limits.so is enabled in common-session
-      ansible.builtin.lineinfile:
-        path: /etc/pam.d/common-session
-        line: 'session required pam_limits.so'
-        state: present
-        create: yes
-        backup: yes
+- name: Ensure pam_limits.so is enabled in common-session-noninteractive
+  ansible.builtin.lineinfile:
+    path: /etc/pam.d/common-session-noninteractive
+    line: 'session required pam_limits.so'
+    state: present
+    create: yes
+    backup: yes
 
-    - name: Ensure pam_limits.so is enabled in common-session-noninteractive
-      ansible.builtin.lineinfile:
-        path: /etc/pam.d/common-session-noninteractive
-        line: 'session required pam_limits.so'
-        state: present
-        create: yes
-        backup: yes
+- name: Set DefaultLimitNOFILE in systemd system.conf
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/system.conf
+    regexp: '^#?DefaultLimitNOFILE='
+    line: 'DefaultLimitNOFILE=100000'
+    state: present
+    backup: yes
 
-    - name: Set DefaultLimitNOFILE in systemd system.conf
-      ansible.builtin.lineinfile:
-        path: /etc/systemd/system.conf
-        regexp: '^#?DefaultLimitNOFILE='
-        line: 'DefaultLimitNOFILE=100000'
-        state: present
-        backup: yes
+- name: Set DefaultLimitNOFILE in systemd user.conf
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/user.conf
+    regexp: '^#?DefaultLimitNOFILE='
+    line: 'DefaultLimitNOFILE=100000'
+    state: present
+    backup: yes
 
-    - name: Set DefaultLimitNOFILE in systemd user.conf
-      ansible.builtin.lineinfile:
-        path: /etc/systemd/user.conf
-        regexp: '^#?DefaultLimitNOFILE='
-        line: 'DefaultLimitNOFILE=100000'
-        state: present
-        backup: yes
-
-    - name: Reload systemd daemon to apply limit changes
-      ansible.builtin.command: systemctl daemon-reexec
+- name: Reload systemd daemon to apply limit changes
+  ansible.builtin.command:
+    cmd: systemctl daemon-reexec
