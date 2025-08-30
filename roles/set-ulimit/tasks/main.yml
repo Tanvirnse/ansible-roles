@@ -23,7 +23,7 @@
 - name: Set root nofile limit
   ansible.builtin.lineinfile:
     path: /etc/security/limits.conf
-    line: 'root    -   nofile 100000'
+    line: 'root    -   nofile 2000000'
     state: present
     insertafter: EOF
     backup: yes
@@ -31,7 +31,7 @@
 - name: Set soft nofile limit for all users
   ansible.builtin.lineinfile:
     path: /etc/security/limits.conf
-    line: '* soft nofile 100000'
+    line: '* soft nofile 2000000'
     state: present
     insertafter: EOF
     backup: yes
@@ -39,7 +39,7 @@
 - name: Set hard nofile limit for all users
   ansible.builtin.lineinfile:
     path: /etc/security/limits.conf
-    line: '* hard nofile 100000'
+    line: '* hard nofile 2000000'
     state: present
     insertafter: EOF
     backup: yes
@@ -64,7 +64,7 @@
   ansible.builtin.lineinfile:
     path: /etc/systemd/system.conf
     regexp: '^#?DefaultLimitNOFILE='
-    line: 'DefaultLimitNOFILE=100000'
+    line: 'DefaultLimitNOFILE=2000000'
     state: present
     backup: yes
 
@@ -72,10 +72,15 @@
   ansible.builtin.lineinfile:
     path: /etc/systemd/user.conf
     regexp: '^#?DefaultLimitNOFILE='
-    line: 'DefaultLimitNOFILE=100000'
+    line: 'DefaultLimitNOFILE=2000000'
     state: present
     backup: yes
 
 - name: Reload systemd daemon to apply limit changes
   ansible.builtin.command:
     cmd: systemctl daemon-reexec
+
+- name: Reboot the server to apply system-wide limits
+  ansible.builtin.reboot:
+    msg: "Reboot initiated by Ansible to apply updated file descriptor limits."
+    reboot_timeout: 5
