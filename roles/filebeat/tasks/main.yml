@@ -1,10 +1,10 @@
 ---
-- name: Ensure Filebeat is installed
-  apt:
-   name: filebeat
-   state: present
-   update_cache: yes
-  become: yes
+#- name: Ensure Filebeat is installed
+#  apt:
+#   name: filebeat
+#   state: present
+#   update_cache: yes
+#  become: yes
 
 - name: Copy Filebeat configuration
   template:
