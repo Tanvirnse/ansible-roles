@@ -2,7 +2,7 @@ filebeat.inputs:
 - type: log
   enabled: true
   paths:
-    - /var/log/ovenmediaengine/ovenmediaengine.log
+    - /var/log/nginx/error.log
 #    - /var/log/kern.log
     # Add more log paths as needed
     # - /opt/applications/app1/logs/*.log
@@ -14,8 +14,8 @@ filebeat.inputs:
     datacenter: ostream
   fields_under_root: true
 
-name: up-pop
-tags: ["production", "origin"]
+name: pop
+tags: ["production", "pop"]
 
 # Disable ALL setup features for clean operation
 setup.ilm.enabled: false
@@ -26,13 +26,13 @@ setup.kibana.enabled: false
 output.elasticsearch:
   hosts: ["https://rnd-logs.udvash-unmesh.com:9200"]
   username: "elastic"
-  password: ""
+  password: "kxWKFTH+rzzRPp9ld8QH"
   ssl:
     enabled: true
     verification_mode: none
 
   # Fixed index name - will create index named "ostream-pop"
-  index: "ostream-origin"
+  index: "ostream-pop"
 
 processors:
   - add_host_metadata:
