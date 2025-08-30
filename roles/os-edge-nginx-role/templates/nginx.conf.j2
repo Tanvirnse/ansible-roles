@@ -2,15 +2,17 @@ user www-data;
 worker_processes auto;
 pid /run/nginx.pid;
 include /etc/nginx/modules-enabled/*.conf;
+worker_rlimit_nofile 100000;
 
 events {
-    worker_connections 768;
+    worker_connections 20480;
     # multi_accept on;
 }
 
 http {
     proxy_cache_path /mnt/ome-storage/nginx-cache levels=1:2 keys_zone=cache_zone_one:4000m max_size=50g;
-
+    keepalive_timeout 65;  # Set the timeout to 65 seconds
+    keepalive_requests 1000;  # Set the maximum number of requests to 1000
     # Correct log format with proper structure
     #log_format main 'time="$time_iso8601" remote_addr="$remote_addr" up_cache_status="$upstream_cache_status" req="$request" status="$status" '
     #              'req_time="$request_time" bytes_sent="$body_bytes_sent" up_cache_status="$upstream_cache_status" '
@@ -30,6 +32,7 @@ http {
 
     # access_log /var/log/nginx/access.log main;
     access_log off;
+   error_log /var/log/nginx/error.log error;
    # upstream origin {
    #     server os-edge-mc-07.udvashunmesh.com.com:443; # Make sure asdf.com is replaced with a real host or IP
    #     keepalive 64;
