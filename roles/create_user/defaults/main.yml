@@ -1,0 +1,4 @@
+# defaults/main.yml
+user_name: "yeasir"
+sudo_group: "sudo"
+user_password: "DevOps@2022#"

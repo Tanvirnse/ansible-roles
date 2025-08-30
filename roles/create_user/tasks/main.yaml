@@ -1,0 +1,24 @@
+---
+- name: Ensure the user {{ user_name }} exists
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    state: present
+    create_home: yes
+
+- name: Set password for user {{ user_name }} (plaintext)
+  ansible.builtin.shell: "echo '{{ user_name }}:{{ user_password }}' | chpasswd"
+  args:
+    executable: /bin/bash
+
+- name: Add user {{ user_name }} to the sudo group
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    groups: "{{ sudo_group }}"
+    append: yes
+
+- name: Ensure the user has sudo privileges
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    regexp: "^{{ user_name }} "
+    line: "{{ user_name }}  ALL=(ALL) NOPASSWD:ALL"
+    validate: '/usr/sbin/visudo -cf %s'
